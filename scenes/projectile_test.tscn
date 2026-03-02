@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://y8kargfdrn6v"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nwi3p"]
+radius = 0.05
+height = 0.1
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kcrnb"]
+radius = 0.05
+height = 0.1
+
+[node name="Projectile test" type="Node3D" unique_id=261766782]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=405767805]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=855461895]
+shape = SubResource("CapsuleShape3D_nwi3p")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=362336279]
+mesh = SubResource("CapsuleMesh_kcrnb")
