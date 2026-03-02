@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://d3hps6j166wpe"]
+
+[ext_resource type="Script" uid="uid://ch4ijmo4hfna7" path="res://scripts/character_body_3d.gd" id="1_4afed"]
+[ext_resource type="Script" uid="uid://c22ccsgopcvwr" path="res://scripts/camera_3d.gd" id="2_ktgtt"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4p0uy"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4afed"]
+
+[node name="BasicBorgTemplate" type="Node3D" unique_id=819359605]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=879613037]
+collision_mask = 2
+script = ExtResource("1_4afed")
+character_name = "TemplateGroundBorg"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1940755725]
+shape = SubResource("CapsuleShape3D_4p0uy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=659883836]
+mesh = SubResource("CapsuleMesh_4afed")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1447651313]
+script = ExtResource("2_ktgtt")
+target_path = NodePath("../CharacterBody3D")

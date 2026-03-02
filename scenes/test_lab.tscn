@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://b6k0tr28m1ffn"]
+
+[ext_resource type="PackedScene" uid="uid://d3hps6j166wpe" path="res://scenes/basic_borg_template.tscn" id="1_nslh3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f8po8"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nslh3"]
+normal_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_15ija"]
+material = SubResource("StandardMaterial3D_nslh3")
+size = Vector3(50, 1, 50)
+
+[node name="TestLab" type="Node3D" unique_id=871606833]
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1067472357]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=759111090]
+shape = SubResource("BoxShape3D_f8po8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=766191017]
+mesh = SubResource("BoxMesh_15ija")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1330622769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14, 0)
+
+[node name="BasicBorgTemplate" parent="." unique_id=819359605 instance=ExtResource("1_nslh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
