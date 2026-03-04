@@ -53,8 +53,8 @@ func _input(event):
 		# Decrease yaw by horizontal mouse movement (invert if needed)
 		yaw -= event.relative.x * mouse_sensitivity
 		
-		# Decrease pitch by vertical mouse movement (invert if needed)
-		pitch -= event.relative.y * mouse_sensitivity
+		# Invert vertical mouse movement: increase pitch by vertical mouse movement
+		pitch += event.relative.y * mouse_sensitivity
 		
 		# Clamp pitch to prevent camera flipping upside down
 		pitch = clamp(pitch, min_pitch, max_pitch)
@@ -70,8 +70,8 @@ func _physics_process(delta):
 		# Adjust yaw by stick horizontal input scaled by sensitivity and delta time
 		yaw -= stick_input.x * stick_sensitivity * delta
 		
-		# Adjust pitch by stick vertical input scaled by sensitivity and delta time
-		pitch -= stick_input.y * stick_sensitivity * delta
+		# Invert vertical stick input for pitch
+		pitch += stick_input.y * stick_sensitivity * delta
 		
 		# Clamp pitch again after stick input
 		pitch = clamp(pitch, min_pitch, max_pitch)

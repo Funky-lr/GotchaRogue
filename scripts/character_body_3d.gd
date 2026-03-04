@@ -39,6 +39,22 @@ var can_ultimate: bool = false
 var can_dash: bool = false
 var can_air_dash: bool = false
 
+# Reference to the camera node for movement direction
+@export var camera_path: NodePath
+var camera: Camera3D
+
+# Projectile scene to instantiate when shooting
+@export var projectile_scene: PackedScene
+
+func _ready():
+	camera = get_node_or_null(camera_path)
+	if camera == null:
+		push_warning("Camera node not found at path: %s" % camera_path)
+
+func _process(delta):
+	if Input.is_action_just_pressed("special_attack"):
+		shoot_projectile()
+
 func _physics_process(delta: float) -> void:
 	# Add gravity if not on floor
 	if can_jump and not is_on_floor():
@@ -48,21 +64,41 @@ func _physics_process(delta: float) -> void:
 	if can_jump and Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Handle walking input
-	if can_walk:
-		var input_dir := Input.get_vector("walk_left", "walk_right", "walk_straight", "walk_back")
-		var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-		if direction:
-			velocity.x = direction.x * SPEED
-			velocity.z = direction.z * SPEED
+	# Handle walking input relative to camera
+	if can_walk and camera:
+		var input_dir := Vector2(
+			Input.get_action_strength("walk_right") - Input.get_action_strength("walk_left"),
+			Input.get_action_strength("walk_straight") - Input.get_action_strength("walk_back")
+		).normalized()
+
+		if input_dir.length() > 0:
+			# Get camera basis vectors
+			var cam_basis = camera.global_transform.basis
+
+			# Camera forward vector (ignore vertical component)
+			var forward = -cam_basis.z
+			forward.y = 0
+			forward = forward.normalized()
+
+			# Camera right vector (ignore vertical component)
+			var right = cam_basis.x
+			right.y = 0
+			right = right.normalized()
+
+			# Calculate movement direction relative to camera
+			var move_dir = (forward * input_dir.y) + (right * input_dir.x)
+			move_dir = move_dir.normalized()
+
+			# Apply movement speed
+			velocity.x = move_dir.x * SPEED
+			velocity.z = move_dir.z * SPEED
 		else:
+			# No input, slow down smoothly
 			velocity.x = move_toward(velocity.x, 0, SPEED * delta)
 			velocity.z = move_toward(velocity.z, 0, SPEED * delta)
 
 	# Placeholder for basic attack (to be implemented)
 	if can_basic_attack:
-		# Example: if Input.is_action_just_pressed("basic_attack"):
-		#     perform_basic_attack()
 		pass
 
 	# Placeholder for special attack (to be implemented)
@@ -84,17 +120,46 @@ func _physics_process(delta: float) -> void:
 	# Move the character using velocity
 	move_and_slide()
 
-# Example function to reduce cooldown timers (call this every frame or timer)
+func shoot_projectile():
+	if projectile_scene == null:
+		push_warning("Projectile scene not assigned!")
+		return
+
+	var projectile_instance = projectile_scene.instantiate()
+	get_parent().add_child(projectile_instance)  # Add to scene tree first
+
+	var forward = Vector3.ZERO
+	var spawn_position = Vector3.ZERO
+
+	if camera:
+		forward = -camera.global_transform.basis.z.normalized()
+		spawn_position = global_transform.origin + Vector3(0, 1.5, 0) + forward * 1.5
+	else:
+		forward = Vector3.FORWARD
+		spawn_position = global_transform.origin + Vector3(0, 1.5, 0)
+
+	projectile_instance.global_transform.origin = spawn_position
+	projectile_instance.global_transform.basis = Basis().looking_at(spawn_position + forward, Vector3.UP)
+
+	var speed = 20.0
+	if "speed" in projectile_instance:
+		speed = projectile_instance.speed
+
+	if projectile_instance is RigidBody3D:
+		projectile_instance.linear_velocity = forward * speed
+
+
+
+
+
+
+
 func update_cooldowns(delta: float) -> void:
 	for key in cooldowns.keys():
 		if cooldowns[key] > 0.0:
 			cooldowns[key] = max(cooldowns[key] - delta, 0.0)
 
-# Example function to perform a basic attack (to be implemented)
 func perform_basic_attack():
 	if cooldowns["basic_attack"] <= 0.0:
-		# Attack logic here
-		cooldowns["basic_attack"] = 1.0  # Example cooldown duration in seconds
+		cooldowns["basic_attack"] = 1.0
 		print("Basic attack performed!")
-
-# You can add similar functions for special_attack, ultimate, dash, air_dash

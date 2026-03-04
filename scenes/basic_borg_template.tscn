@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ch4ijmo4hfna7" path="res://scripts/character_body_3d.gd" id="1_4afed"]
 [ext_resource type="Script" uid="uid://c22ccsgopcvwr" path="res://scripts/camera_3d.gd" id="2_ktgtt"]
+[ext_resource type="PackedScene" uid="uid://y8kargfdrn6v" path="res://scenes/projectile_test.tscn" id="2_v7x6v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4p0uy"]
 
@@ -13,6 +14,16 @@
 collision_mask = 2
 script = ExtResource("1_4afed")
 character_name = "TemplateGroundBorg"
+number = null
+health_points = null
+max_health_points = null
+level = null
+tribe = null
+rarity = null
+cost = null
+base_damage = null
+camera_path = NodePath("../Camera3D")
+projectile_scene = ExtResource("2_v7x6v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1940755725]
 shape = SubResource("CapsuleShape3D_4p0uy")
