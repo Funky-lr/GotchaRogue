@@ -14,6 +14,7 @@ radius = 1.0
 [node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=405767805]
 collision_layer = 0
 collision_mask = 0
+gravity_scale = 0.0
 script = ExtResource("1_kcrnb")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=855461895]

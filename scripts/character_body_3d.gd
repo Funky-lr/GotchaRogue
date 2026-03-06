@@ -128,7 +128,7 @@ func shoot_projectile():
 	var projectile_instance = projectile_scene.instantiate()
 	get_parent().add_child(projectile_instance)  # Add to scene tree first
 
-	var forward = Vector3.ZERO
+	var forward = Vector3.FORWARD
 	var spawn_position = Vector3.ZERO
 
 	if camera:
@@ -139,7 +139,7 @@ func shoot_projectile():
 		spawn_position = global_transform.origin + Vector3(0, 1.5, 0)
 
 	projectile_instance.global_transform.origin = spawn_position
-	projectile_instance.global_transform.basis = Basis().looking_at(spawn_position + forward, Vector3.UP)
+	projectile_instance.global_transform.basis = Basis.looking_at(forward, Vector3.UP)
 
 	var speed = 20.0
 	if "speed" in projectile_instance:
@@ -147,11 +147,7 @@ func shoot_projectile():
 
 	if projectile_instance is RigidBody3D:
 		projectile_instance.linear_velocity = forward * speed
-
-
-
-
-
+		print("Projectile velocity set to: ", projectile_instance.linear_velocity)
 
 
 func update_cooldowns(delta: float) -> void:

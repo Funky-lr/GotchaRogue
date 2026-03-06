@@ -6,7 +6,8 @@ extends RigidBody3D
 var life_timer: float = 0.0
 
 func _ready():
-	gravity_scale = 0  # Disable gravity to fly straight
+	gravity_scale = 0
+	print("Projectile _ready() called, gravity_scale set to ", gravity_scale)
 
 func _physics_process(delta):
 	life_timer += delta
