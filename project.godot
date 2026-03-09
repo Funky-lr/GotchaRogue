@@ -14,6 +14,7 @@ config/name="GotchaRogue"
 run/main_scene="uid://b6k0tr28m1ffn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+config/tags=PackedStringArray("game")
 
 [input]
 
